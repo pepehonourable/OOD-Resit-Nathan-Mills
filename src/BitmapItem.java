@@ -29,14 +29,14 @@ public class BitmapItem extends SlideItem {
 
 
   	//level indicates the item-level; name indicates the name of the file with the image
-	public BitmapItem(int level, String name) {
+	public BitmapItem(int level, String imageName) {
 		super(level);
-		imageName = name;
+		this.imageName = imageName;
 		try {
-			bufferedImage = ImageIO.read(new File(imageName));
+			bufferedImage = ImageIO.read(new File(this.imageName));
 		}
 		catch (IOException e) {
-			System.err.println(FILE + imageName + NOTFOUND) ;
+			System.err.println(FILE + this.imageName + NOTFOUND) ;
 		}
 	}
 
@@ -46,10 +46,10 @@ public class BitmapItem extends SlideItem {
 	}
 
 	//Returns the bounding box of the image
-	public Rectangle getBoundingBox(Graphics graphics, ImageObserver observer, float scale, Style myStyle) {
-		return new Rectangle((int) (myStyle.indent * scale), 0,
+	public Rectangle getBoundingBox(Graphics graphics, ImageObserver observer, float scale, Style style) {
+		return new Rectangle((int) (style.indent * scale), 0,
 				(int) (bufferedImage.getWidth(observer) * scale),
-				((int) (myStyle.leading * scale)) + 
+				((int) (style.leading * scale)) +
 				(int) (bufferedImage.getHeight(observer) * scale));
 	}
 

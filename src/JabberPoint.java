@@ -20,23 +20,30 @@ public class JabberPoint {
 	protected static final String JABERR = "Jabberpoint Error ";
 	protected static final String JABVERSION = "Jabberpoint 1.6 - OU version";
 
-	/** The main program */
 	public static void main(String[] argv) {
-		
 		Style.createStyles();
 		Presentation presentation = new Presentation();
 		SlideViewerFrame slideViewerFrame = new SlideViewerFrame(JABVERSION, presentation);
+
 		try {
-			if (argv.length == 0) { //set default to demo presentation
-				AccessorLoadFile.getDemoAccessor().loadFile(presentation, "");
-			} else {
-				new XMLAccessorLoadFile().loadFile(presentation, argv[0]);
-			}
+			loadPresentation(argv, presentation);
 			slideViewerFrame.getSlideViewerComponent().setSlideNumber(0);
-		} catch (IOException ex) {
-			JOptionPane.showMessageDialog(null,
-					IOERR + ex, JABERR,
-					JOptionPane.ERROR_MESSAGE);
+		} catch (IOException exception) {
+			showErrorDialog(IOERR + exception);
 		}
+	}
+
+	private static void loadPresentation(String[] argv, Presentation presentation) throws IOException {
+		if (argv.length == 0) {
+			// Set default to demo presentation
+			AccessorLoadFile.getDemoAccessor().loadFile(presentation, "");
+		} else {
+			new XMLAccessorLoadFile().loadFile(presentation, argv[0]);
+		}
+	}
+
+	//Error message
+	private static void showErrorDialog(String message) {
+		JOptionPane.showMessageDialog(null, message, JABERR, JOptionPane.ERROR_MESSAGE);
 	}
 }

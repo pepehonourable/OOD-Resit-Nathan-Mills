@@ -13,7 +13,7 @@ import java.awt.event.KeyAdapter;
 
 public class KeyController extends KeyAdapter {
 
-	private SlideViewerComponent slideViewerComponent;
+	private final SlideViewerComponent slideViewerComponent;
 
 	public KeyController(SlideViewerComponent slideViewerComponent) {
 		this.slideViewerComponent = slideViewerComponent;
@@ -22,12 +22,16 @@ public class KeyController extends KeyAdapter {
 	public void keyPressed(KeyEvent keyEvent) {
 		switch(keyEvent.getKeyCode()) {
 			case KeyEvent.VK_PAGE_DOWN, KeyEvent.VK_DOWN, KeyEvent.VK_ENTER, '+' ->
-				this.slideViewerComponent.nextSlide();
+				// Navigate to the next slide
+					this.slideViewerComponent.nextSlide();
 			case KeyEvent.VK_PAGE_UP, KeyEvent.VK_UP, '-' ->
-				this.slideViewerComponent.prevSlide();
+				// Navigate to the previous slide
+					this.slideViewerComponent.prevSlide();
 			case 'q', 'Q' ->
-				System.exit(0);
+				// Exit the application
+					System.exit(0);
 			default -> {
+				// Do nothing for other keys
 			}
 		}
 	}

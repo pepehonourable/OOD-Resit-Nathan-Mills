@@ -17,7 +17,6 @@ public class Presentation {
 	private String currentTitle; //The title of the presentation
 	private ArrayList<Slide> slides = new ArrayList<>(); //An ArrayList with slides
 	private int currentSlideNumber; //The number of the current slide
-//	private SlideViewerComponent slideViewComponent = null; //The view component of the slides
 
 	public Presentation() {
 	}
@@ -42,7 +41,6 @@ public class Presentation {
 	//Change the current slide number and report it in the window
 	public void setSlideNumber(int number) {
 		if (number >= 0 && number < this.slides.size()) {
-//			slideViewComponent.update(this, getCurrentSlide());
 			currentSlideNumber = number;
 		}
 	}
