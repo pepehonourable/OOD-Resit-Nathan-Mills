@@ -12,83 +12,82 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-
-/** XMLAccessor, reads and writes XML files
- * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
- * @version 1.1 2002/12/17 Gert Florijn
- * @version 1.2 2003/11/19 Sylvia Stuurman
- * @version 1.3 2004/08/17 Sylvia Stuurman
- * @version 1.4 2007/07/16 Sylvia Stuurman
- * @version 1.5 2010/03/03 Sylvia Stuurman
- * @version 1.6 2014/05/16 Sylvia Stuurman
+/**
+ * XMLAccessorLoadFile reads XML files to load presentation data.
+ *
+ * @author Ian F. Darwin, ian@darwinsys.com
+ * @version 1.6 2014/05/16
  */
+public class XMLAccessorLoadFile implements AccessorLoadFile {
 
-public class XMLAccessorLoadFile implements XMLTags, AccessorLoadFile {
+    private static final String SHOWTITLE = "showtitle";
+    private static final String SLIDE = "slide";
+    private static final String SLIDETITLE = "title";
+    private static final String ITEM = "item";
+    private static final String LEVEL = "level";
+    private static final String KIND = "kind";
+    private static final String TEXT = "text";
+    private static final String IMAGE = "image";
 
     private String getTitle(Element element, String tagName) {
         NodeList titles = element.getElementsByTagName(tagName);
         return titles.item(0).getTextContent();
-
     }
 
-    public void loadFile(Presentation presentation, String filename) throws IOException {
-        int slideNumber, itemNumber, max, maxItems;
+    public void loadFile(Presentation presentation, String filename) throws IOException, SAXException, ParserConfigurationException {
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = builder.parse(new File(filename)); //Create a JDOM document
+            Document document = parseXmlFile(filename);
             Element doc = document.getDocumentElement();
             presentation.setTitle(getTitle(doc, SHOWTITLE));
 
             NodeList slides = doc.getElementsByTagName(SLIDE);
-            max = slides.getLength();
-            for (slideNumber = 0; slideNumber < max; slideNumber++) {
+            int maxSlides = slides.getLength();
+            for (int slideNumber = 0; slideNumber < maxSlides; slideNumber++) {
                 Element xmlSlide = (Element) slides.item(slideNumber);
                 Slide slide = new Slide();
                 slide.setTitle(getTitle(xmlSlide, SLIDETITLE));
                 presentation.append(slide);
 
                 NodeList slideItems = xmlSlide.getElementsByTagName(ITEM);
-                maxItems = slideItems.getLength();
-                for (itemNumber = 0; itemNumber < maxItems; itemNumber++) {
+                int maxItems = slideItems.getLength();
+                for (int itemNumber = 0; itemNumber < maxItems; itemNumber++) {
                     Element item = (Element) slideItems.item(itemNumber);
                     loadSlideItem(slide, item);
                 }
             }
-        }
-        catch (IOException iox) {
-            System.err.println(iox);
-        }
-        catch (SAXException sax) {
-            System.err.println(sax.getMessage());
-        }
-        catch (ParserConfigurationException pcx) {
-            System.err.println(XMLTags.PCE);
+        } catch (IOException | SAXException | ParserConfigurationException exception) {
+            throw exception;
         }
     }
 
+    private Document parseXmlFile(String filename) throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        return builder.parse(new File(filename));
+    }
+
     protected void loadSlideItem(Slide slide, Element item) {
-        int level = 1; // default
         NamedNodeMap attributes = item.getAttributes();
-        String levelText = attributes.getNamedItem(XMLTags.LEVEL).getTextContent();
-        if (levelText != null) {
+        int level = parseLevelAttribute(attributes.getNamedItem(LEVEL));
+        String type = attributes.getNamedItem(KIND).getTextContent();
+
+        if (TEXT.equals(type)) {
+            slide.append(new TextItem(level, item.getTextContent()));
+        } else if (IMAGE.equals(type)) {
+            slide.append(new BitmapItem(level, item.getTextContent()));
+        } else {
+            System.err.println(XMLTags.UNKNOWNTYPE);
+        }
+    }
+
+    private int parseLevelAttribute(org.w3c.dom.Node levelNode) {
+        int level = 1; // default
+        if (levelNode != null) {
             try {
-                level = Integer.parseInt(levelText);
-            }
-            catch(NumberFormatException x) {
+                level = Integer.parseInt(levelNode.getTextContent());
+            } catch (NumberFormatException e) {
                 System.err.println(XMLTags.NFE);
             }
         }
-        String type = attributes.getNamedItem(XMLTags.KIND).getTextContent();
-        if (XMLTags.TEXT.equals(type)) {
-            slide.append(new TextItem(level, item.getTextContent()));
-        }
-        else {
-            if (XMLTags.IMAGE.equals(type)) {
-                slide.append(new BitmapItem(level, item.getTextContent()));
-            }
-            else {
-                System.err.println(XMLTags.UNKNOWNTYPE);
-            }
-        }
+        return level;
     }
 }

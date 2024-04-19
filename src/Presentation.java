@@ -40,9 +40,11 @@ public class Presentation {
 
 	//Change the current slide number and report it in the window
 	public void setSlideNumber(int number) {
-		if (number >= 0 && number < this.slides.size()) {
-			currentSlideNumber = number;
+		// Out of bounds check
+		if (number < 0 || number > getSize()) {
+			return;
 		}
+		currentSlideNumber = number;
 	}
 
 	public ArrayList<Slide> getSlideList(){

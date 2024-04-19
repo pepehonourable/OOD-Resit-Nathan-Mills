@@ -21,9 +21,10 @@ import javax.swing.JFrame;
 public class SlideViewerComponent extends JComponent implements SlideDesign {
 		
 	private Slide slide; //The current slide
-	private Font labelFont; //The font for labels
+	private final Font labelFont; //The font for labels
 	private Presentation presentation ; //The presentation
-	private JFrame frame;
+	private final JFrame frame;
+
 	public SlideViewerComponent(Presentation pres, JFrame frame) {
 		setBackground(BGCOLOR);
 		presentation = pres;

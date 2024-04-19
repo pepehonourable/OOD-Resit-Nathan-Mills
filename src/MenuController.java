@@ -2,7 +2,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.swing.JOptionPane;
+import javax.xml.parsers.ParserConfigurationException;
+
 import Constants.MenuControlButtons;
+import org.xml.sax.SAXException;
 
 public class MenuController extends MenuBar {
 
@@ -74,8 +77,10 @@ public class MenuController extends MenuBar {
 			slideViewerComponent.setSlideNumber(0);
 		} catch (IOException exc) {
 			showErrorDialog(MenuControlButtons.LOADERR, MenuControlButtons.IOEX + exc);
-		}
-		parentFrame.repaint();
+		} catch (ParserConfigurationException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+        parentFrame.repaint();
 	}
 
 	private void goToSlide() {

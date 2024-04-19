@@ -1,3 +1,6 @@
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 /**
@@ -19,6 +22,6 @@ public interface AccessorLoadFile {
         return new DemoPresentation();
     }
 
-    void loadFile(Presentation p, String fn) throws IOException;
+    void loadFile(Presentation presentation, String filename) throws IOException, SAXException, ParserConfigurationException;
 
 }

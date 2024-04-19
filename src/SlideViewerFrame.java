@@ -30,7 +30,7 @@ public class SlideViewerFrame extends JFrame {
 		return this.slideViewerComponent;
 	}
 
-//Setup the GUI
+//Set up the GUI
 	public void setupWindow(SlideViewerComponent viewerComponent, Presentation presentation) {
 		setTitle(JABTITLE);
 		addWindowListener(new WindowAdapter() {

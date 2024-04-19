@@ -1,4 +1,7 @@
+import org.xml.sax.SAXException;
+
 import javax.swing.JOptionPane;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 /** JabberPoint Main Program
@@ -30,10 +33,12 @@ public class JabberPoint {
 			slideViewerFrame.getSlideViewerComponent().setSlideNumber(0);
 		} catch (IOException exception) {
 			showErrorDialog(IOERR + exception);
-		}
-	}
+		} catch (ParserConfigurationException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	private static void loadPresentation(String[] argv, Presentation presentation) throws IOException {
+	private static void loadPresentation(String[] argv, Presentation presentation) throws IOException, ParserConfigurationException, SAXException {
 		if (argv.length == 0) {
 			// Set default to demo presentation
 			AccessorLoadFile.getDemoAccessor().loadFile(presentation, "");
