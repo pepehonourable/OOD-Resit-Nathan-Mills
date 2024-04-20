@@ -9,6 +9,24 @@ import org.xml.sax.SAXException;
 
 public class MenuController extends MenuBar {
 
+	private static final String ABOUT = "About";
+	private static final String FILE = "File";
+	private static final String EXIT = "Exit";
+	private static final String GOTO = "Go to";
+	private static final String HELP = "Help";
+	private static final String NEW = "New";
+	private static final String NEXT = "Next";
+	private static final String OPEN = "Open";
+	private static final String PAGENR = "Page number?";
+	private static final String PREV = "Prev";
+	private static final String SAVE = "Save";
+	private static final String VIEW = "View";
+	private static final String TESTFILE = "testPresentation.xml";
+	private static final String SAVEFILE = "savedPresentation.xml";
+	private static final String IOEX = "IO Exception: ";
+	private static final String LOADERR = "Load Error";
+	private static final String SAVEERR = "Save Error";
+	
 	private final Frame parentFrame;
 	private final SlideViewerComponent slideViewerComponent;
 	private final Menu fileMenu;
@@ -26,25 +44,25 @@ public class MenuController extends MenuBar {
 	}
 
 	private Menu createFileMenu() {
-		Menu menu = new Menu(MenuControlButtons.FILE);
-		menu.add(createMenuItem(MenuControlButtons.NEW, e -> { slideViewerComponent.clear(); parentFrame.repaint(); }));
-		menu.add(createMenuItem(MenuControlButtons.SAVE, e -> savePresentation()));
-		menu.add(createMenuItem(MenuControlButtons.OPEN, e -> loadPresentation()));
-		menu.add(createMenuItem(MenuControlButtons.EXIT, e -> System.exit(0)));
+		Menu menu = new Menu(FILE);
+		menu.add(createMenuItem(NEW, e -> { slideViewerComponent.clear(); parentFrame.repaint(); }));
+		menu.add(createMenuItem(SAVE, e -> savePresentation()));
+		menu.add(createMenuItem(OPEN, e -> loadPresentation()));
+		menu.add(createMenuItem(EXIT, e -> System.exit(0)));
 		return menu;
 	}
 
 	private Menu createViewMenu() {
-		Menu menu = new Menu(MenuControlButtons.VIEW);
-		menu.add(createMenuItem(MenuControlButtons.NEXT, e -> slideViewerComponent.nextSlide()));
-		menu.add(createMenuItem(MenuControlButtons.PREV, e -> slideViewerComponent.prevSlide()));
-		menu.add(createMenuItem(MenuControlButtons.GOTO, e -> goToSlide()));
+		Menu menu = new Menu(VIEW);
+		menu.add(createMenuItem(NEXT, e -> slideViewerComponent.nextSlide()));
+		menu.add(createMenuItem(PREV, e -> slideViewerComponent.prevSlide()));
+		menu.add(createMenuItem(GOTO, e -> goToSlide()));
 		return menu;
 	}
 
 	private Menu createHelpMenu() {
-		Menu menu = new Menu(MenuControlButtons.HELP);
-		menu.add(createMenuItem(MenuControlButtons.ABOUT, e -> showAboutBox()));
+		Menu menu = new Menu(HELP);
+		menu.add(createMenuItem(ABOUT, e -> showAboutBox()));
 		return menu;
 	}
 
@@ -63,9 +81,9 @@ public class MenuController extends MenuBar {
 	private void savePresentation() {
 		XMLAccessorSaveFile xmlAccessor = new XMLAccessorSaveFile();
 		try {
-			xmlAccessor.saveFile(slideViewerComponent.getPresentation(), MenuControlButtons.SAVEFILE);
+			xmlAccessor.saveFile(slideViewerComponent.getPresentation(), SAVEFILE);
 		} catch (IOException exc) {
-			showErrorDialog(MenuControlButtons.SAVEERR, MenuControlButtons.IOEX + exc);
+			showErrorDialog(SAVEERR, IOEX + exc);
 		}
 	}
 
@@ -73,10 +91,10 @@ public class MenuController extends MenuBar {
 		slideViewerComponent.clear();
 		XMLAccessorLoadFile xmlAccessor = new XMLAccessorLoadFile();
 		try {
-			xmlAccessor.loadFile(slideViewerComponent.getPresentation(), MenuControlButtons.TESTFILE);
+			xmlAccessor.loadFile(slideViewerComponent.getPresentation(), TESTFILE);
 			slideViewerComponent.setSlideNumber(0);
 		} catch (IOException exc) {
-			showErrorDialog(MenuControlButtons.LOADERR, MenuControlButtons.IOEX + exc);
+			showErrorDialog(LOADERR, IOEX + exc);
 		} catch (ParserConfigurationException | SAXException e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +102,7 @@ public class MenuController extends MenuBar {
 	}
 
 	private void goToSlide() {
-		String pageNumber = JOptionPane.showInputDialog(MenuControlButtons.PAGENR);
+		String pageNumber = JOptionPane.showInputDialog(PAGENR);
 		try {
 			int pageNumberParsed = Integer.parseInt(pageNumber);
 			if (pageNumberParsed <= slideViewerComponent.getPresentation().getSize()) {

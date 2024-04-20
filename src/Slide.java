@@ -1,5 +1,3 @@
-import Constants.SlideDesign;
-
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
@@ -15,7 +13,7 @@ import java.util.Vector;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-public class Slide implements SlideDesign {
+public class Slide {
 	public final static int WIDTH = 1200;
 	public final static int HEIGHT = 800;
 	protected String title; //The title is kept separately

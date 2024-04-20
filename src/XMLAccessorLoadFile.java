@@ -5,7 +5,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import Constants.XMLTags;
 import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,13 +20,16 @@ import org.w3c.dom.NodeList;
 public class XMLAccessorLoadFile implements AccessorLoadFile {
 
     private static final String SHOWTITLE = "showtitle";
-    private static final String SLIDE = "slide";
     private static final String SLIDETITLE = "title";
+    private static final String SLIDE = "slide";
     private static final String ITEM = "item";
     private static final String LEVEL = "level";
     private static final String KIND = "kind";
     private static final String TEXT = "text";
     private static final String IMAGE = "image";
+
+    private static final String UNKNOWNTYPE = "Unknown Element type";
+    private static final String NFE = "Number Format Exception";
 
     private String getTitle(Element element, String tagName) {
         NodeList titles = element.getElementsByTagName(tagName);
@@ -75,7 +77,7 @@ public class XMLAccessorLoadFile implements AccessorLoadFile {
         } else if (IMAGE.equals(type)) {
             slide.append(new BitmapItem(level, item.getTextContent()));
         } else {
-            System.err.println(XMLTags.UNKNOWNTYPE);
+            System.err.println(UNKNOWNTYPE);
         }
     }
 
@@ -85,7 +87,7 @@ public class XMLAccessorLoadFile implements AccessorLoadFile {
             try {
                 level = Integer.parseInt(levelNode.getTextContent());
             } catch (NumberFormatException e) {
-                System.err.println(XMLTags.NFE);
+                System.err.println(NFE);
             }
         }
         return level;

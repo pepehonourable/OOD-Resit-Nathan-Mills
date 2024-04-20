@@ -1,9 +1,4 @@
-import Constants.SlideDesign;
-
-import java.awt.Font;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -18,8 +13,16 @@ import javax.swing.JFrame;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-public class SlideViewerComponent extends JComponent implements SlideDesign {
-		
+public class SlideViewerComponent extends JComponent {
+
+	private static final Color BGCOLOR = Color.white;
+	private static final Color COLOR = Color.black;
+	private static final String FONTNAME = "Dialog";
+	private static final int FONTSTYLE = Font.BOLD;
+	private static final int FONTHEIGHT = 10;
+	private static final int XPOS = 1100;
+	private static final int YPOS = 20;
+
 	private Slide slide; //The current slide
 	private final Font labelFont; //The font for labels
 	private Presentation presentation ; //The presentation
